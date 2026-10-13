@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inicio | MegaMercado</title>
+    <meta
+      name="description"
+      content="Ofertas semanales, delivery en el día y todo para tu hogar en MegaMercado."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="contenedor">
+        <p>Delivery gratis en compras desde S/ 150</p>
+        <a href="contacto.html">Ver nuestras sedes</a>
+      </div>
+    </div>
+    <header class="header">
+      <div class="contenedor header__main">
+        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"
+          ><img
+            src="img/logo-cesta.svg"
+            alt=""
+            
+            width="62"
+            height="50"
+          />Mega<span>Mercado</span></a
+        >
+        <form
+          class="buscador"
+          role="search"
+          action="catalogo.html"
+          method="get"
+        >
+          <label class="sr-only" for="q">Buscar productos</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="¿Qué estás buscando hoy?"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+        <div class="header__acciones">
+          <a class="cuenta" id="enlaceCuenta" href="login.html"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg
+            ><span
+              ><span class="cuenta__saludo">Hola</span
+              ><span class="cuenta__accion">Iniciar sesión</span></span
+            ></a
+          >
+          <button type="button" class="salir" id="botonSalir" hidden>
+            Salir
+          </button>
+          <a class="carrito" href="registro.html" aria-label="Mi pedido"
+            ><span class="sr-only">Productos en mi pedido:</span
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6"
+              />
+              <circle cx="10" cy="20.5" r="1.3" />
+              <circle cx="18" cy="20.5" r="1.3" /></svg
+            ><span class="carrito__contador" id="contadorCarrito">0</span></a
+          >
+        </div>
+      </div>
+      <nav class="nav" aria-label="Principal">
+        <div class="contenedor">
+          <ul>
+            <li><a href="index.html" aria-current="page">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="registro.html">Delivery</a></li>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>
+              <a class="nav__oferta" href="catalogo.html?cat=ofertas"
+                >Ofertas de la semana</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main id="contenido">
+      <div class="contenedor">
+        <section class="hero" aria-label="Promociones">
+          <div class="hero__ventana">
+            <div class="hero__pista" id="heroPista"></div>
+          </div>
+          <button
+            type="button"
+            class="hero__flecha hero__flecha--prev"
+            id="heroPrev"
+            aria-label="Diapositiva anterior"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            class="hero__flecha hero__flecha--next"
+            id="heroNext"
+            aria-label="Diapositiva siguiente"
+          >
+            ›
+          </button>
+          <div class="hero__puntos" id="heroPuntos"></div>
+        </section>
+
+        <ul class="beneficios">
+          <li>
+            <span class="icono" aria-hidden="true"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" />
+                <circle cx="7" cy="18" r="1.8" />
+                <circle cx="17" cy="18" r="1.8" /></svg></span
+            ><span
+              ><strong>Delivery en el día</strong
+              ><small>Gratis desde S/ 150</small></span
+            >
+          </li>
+          <li>
+            <span class="icono" aria-hidden="true"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="6" width="18" height="12" rx="2" />
+                <path d="M3 10h18M7 15h3" /></svg></span
+            ><span
+              ><strong>Paga como quieras</strong
+              ><small>Efectivo, Yape o tarjeta</small></span
+            >
+          </li>
+          <li>
+            <span class="icono" aria-hidden="true"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 12V4h8l10 10-8 8z" />
+                <circle cx="7.5" cy="8.5" r="1.2" /></svg></span
+            ><span
+              ><strong>Ofertas cada semana</strong
+              ><small>Precios bajos en abarrotes</small></span
+            >
+          </li>
+          <li>
+            <span class="icono" aria-hidden="true"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="6" />
+                <path d="M20 20l-4.5-4.5" /></svg></span
+            ><span
+              ><strong>Sigue tu pedido</strong
+              ><small>Con tu código de seguimiento</small></span
+            >
+          </li>
+        </ul>
+
+        <section class="seccion" aria-labelledby="t-cats">
+          <div class="seccion__cabecera">
+            <h2 id="t-cats">Compra por categoría</h2>
+          </div>
+          <ul class="categorias">
+            <li>
+              <a href="catalogo.html?cat=abarrotes"
+                ><span class="circulo" aria-hidden="true"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0" /></svg></span
+                >Abarrotes</a
+              >
+            </li>
+            <li>
+              <a href="catalogo.html?cat=frutas"
+                ><span class="circulo" aria-hidden="true"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 8c-3-2-7 0-7 5 0 4 3 7 5 7 1 0 1.5-.5 2-.5s1 .5 2 .5c2 0 5-3 5-7 0-5-4-7-7-5z"
+                    />
+                    <path d="M12 8c0-2 1-3 3-4" /></svg></span
+                >Frutas y verduras</a
+              >
+            </li>
+            <li>
+              <a href="catalogo.html?cat=lacteos"
+                ><span class="circulo" aria-hidden="true"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M9 3h6v3l2 3v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9l2-3z"
+                    />
+                    <path d="M7 13h10" /></svg></span
+                >Lácteos</a
+              >
+            </li>
+            <li>
+              <a href="catalogo.html?cat=limpieza"
+                ><span class="circulo" aria-hidden="true"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M8 10h6v11H8zM10 10V6h4l2-2" />
+                    <path d="M18 6h2M18 9h2" /></svg></span
+                >Limpieza</a
+              >
+            </li>
+            <li>
+              <a href="catalogo.html?cat=ofertas"
+                ><span class="circulo circulo--oferta" aria-hidden="true"
+                  ><svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 12V4h8l10 10-8 8z" />
+                    <circle cx="7.5" cy="8.5" r="1.2" /></svg></span
+                >Ofertas</a
+              >
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion" aria-labelledby="t-ofertas">
+          <div class="seccion__cabecera">
+            <h2 id="t-ofertas">Ofertas de la semana</h2>
+            <a href="catalogo.html?cat=ofertas">Ver todas</a>
+          </div>
+          <div class="grilla" id="gridOfertas"></div>
+        </section>
+
+        <section class="seccion" aria-labelledby="t-frutas">
+          <div class="seccion__cabecera">
+            <h2 id="t-frutas">Frutas y verduras</h2>
+            <a href="catalogo.html?cat=frutas">Ver todas</a>
+          </div>
+          <div class="grilla" id="gridFrutas"></div>
+        </section>
+
+        <section class="seccion" aria-labelledby="t-pasos">
+          <div class="seccion__cabecera">
+            <h2 id="t-pasos">Así funciona el delivery</h2>
+          </div>
+          <ol class="pasos">
+            <li>
+              <strong>Elige tus productos</strong
+              ><span>Agrégalos desde el catálogo.</span>
+            </li>
+            <li>
+              <strong>Solicita tu delivery</strong
+              ><span>Inicia sesión y completa tu dirección y horario.</span>
+            </li>
+            <li>
+              <strong>Sigue tu pedido</strong
+              ><span>Consulta el estado con tu código en Mis pedidos.</span>
+            </li>
+          </ol>
+        </section>
+
+        <figure class="banner">
+          <picture>
+            <source media="(max-width: 600px)" srcset="img/banner-chico.svg" />
+            <img
+              src="img/banner-grande.svg"
+              alt="Delivery a domicilio en Trujillo"
+              width="1200"
+              height="300"
+              loading="lazy"
+            />
+          </picture>
+          <figcaption>
+            Elige tu horario y recibimos tu pedido en la puerta de tu casa.
+          </figcaption>
+        </figure>
+
+        <section class="llamado">
+          <div>
+            <h2>¿Todavía no tienes cuenta?</h2>
+            <p>Créala en un minuto y guarda el historial de tus pedidos.</p>
+          </div>
+          <a class="btn" href="login.html#cuenta">Crear mi cuenta</a>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="contenedor footer__cols">
+        <div>
+          <a class="logo" href="index.html"
+            ><img
+              src="img/logo-cesta.svg"
+              alt=""
+              width="62"
+              height="50"
+            />Mega<span>Mercado</span></a
+          >
+          <p>Tu supermercado de confianza. Compra en línea y recibe en casa.</p>
+        </div>
+        <div>
+          <h2>Compra</h2>
+          <ul>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html?cat=ofertas">Ofertas</a></li>
+            <li><a href="registro.html">Solicitar delivery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Mi cuenta</h2>
+          <ul>
+            <li><a href="login.html">Iniciar sesión</a></li>
+            <li><a href="login.html#cuenta">Crear cuenta</a></li>
+            <li><a href="consulta.html">Mis pedidos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Atención</h2>
+          <ul>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>Todos los días</li>
+            <li>8:00 am - 10:00 pm</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__copy">© 2026 MegaMercado Perú</p>
+    </footer>
+    <script type="module" src="js/auth/sesion-ui.js"></script>
+    <script type="module" src="js/registro/inicio.js"></script>
+  </body>
+</html>

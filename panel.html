@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel de pedidos | MegaMercado</title>
+    <meta
+      name="description"
+      content="Panel de pedidos en MegaMercado, tu supermercado en línea."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/panel.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="contenedor">
+        <p>Delivery gratis en compras desde S/ 150</p>
+        <a href="contacto.html">Ver nuestras sedes</a>
+      </div>
+    </div>
+    <header class="header">
+      <div class="contenedor header__main">
+        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"
+          ><img
+            src="img/logo-cesta.svg"
+            alt=""
+            width="62"
+            height="50"
+          />Mega<span>Mercado</span></a
+        >
+        <form
+          class="buscador"
+          role="search"
+          action="catalogo.html"
+          method="get"
+        >
+          <label class="sr-only" for="q">Buscar productos</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="¿Qué estás buscando hoy?"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+        <div class="header__acciones">
+          <a class="cuenta" id="enlaceCuenta" href="login.html"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg
+            ><span
+              ><span class="cuenta__saludo">Hola</span
+              ><span class="cuenta__accion">Iniciar sesión</span></span
+            ></a
+          >
+          <button type="button" class="salir" id="botonSalir" hidden>
+            Salir
+          </button>
+          <a class="carrito" href="registro.html" aria-label="Mi pedido"
+            ><span class="sr-only">Productos en mi pedido:</span
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6"
+              />
+              <circle cx="10" cy="20.5" r="1.3" />
+              <circle cx="18" cy="20.5" r="1.3" /></svg
+            ><span class="carrito__contador" id="contadorCarrito">0</span></a
+          >
+        </div>
+      </div>
+      <nav class="nav" aria-label="Principal">
+        <div class="contenedor">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="registro.html">Delivery</a></li>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>
+              <a class="nav__oferta" href="catalogo.html?cat=ofertas"
+                >Ofertas de la semana</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main id="contenido">
+      <div class="contenedor pagina">
+        <div class="pagina__cab">
+          <div>
+            <h1>Panel de pedidos <span class="rol" id="rolUsuario"></span></h1>
+            <p class="pagina__sub">
+              Sesión de <strong id="nombreUsuario"></strong>. Aquí ves y
+              gestionas los pedidos de todos los clientes.
+            </p>
+          </div>
+          <button type="button" class="btn btn--primario" id="btnNuevo">
+            Nuevo pedido
+          </button>
+        </div>
+        <div class="resumen-cifras" aria-label="Resumen">
+          <div class="cifra"><strong id="cifraTotal">0</strong>Pedidos</div>
+          <div class="cifra cifra--registrado">
+            <strong id="cifraRegistrado">0</strong>Registrados
+          </div>
+          <div class="cifra cifra--atendido">
+            <strong id="cifraAtendido">0</strong>Atendidos
+          </div>
+          <div class="cifra cifra--rechazado">
+            <strong id="cifraRechazado">0</strong>Rechazados
+          </div>
+        </div>
+        <p class="aviso-turno" id="avisoTurno" role="status"></p>
+        <p id="avisoError" class="aviso aviso--error" role="alert" hidden></p>
+        <div class="herramientas">
+          <label class="sr-only" for="buscar">Buscar pedidos</label>
+          <input
+            id="buscar"
+            type="search"
+            placeholder="Buscar por código, cliente, distrito o producto"
+          />
+          <label class="sr-only" for="filtroEstado">Filtrar por estado</label>
+          <select id="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option value="registrado">Registrado</option>
+            <option value="atendido">Atendido</option>
+            <option value="rechazado">Rechazado</option>
+          </select>
+        </div>
+        <div class="tabla-scroll">
+          <table>
+            <caption id="conteoTabla" role="status"></caption>
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Contacto</th>
+                <th scope="col">Entrega en</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Detalle</th>
+                <th scope="col">Total</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCuerpo"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <dialog id="dlgRegistro" aria-labelledby="tituloDialogo">
+        <div class="dialogo__cab"><h2 id="tituloDialogo"></h2></div>
+        <form id="formRegistro" novalidate>
+          <div class="dialogo__cuerpo">
+            <fieldset class="grupo">
+              <legend>Contacto y dirección</legend>
+              <div class="form-grid">
+                <div class="campo ancho">
+                  <label for="p-nombre_contacto">Nombre de quien recibe</label>
+                  <input
+                    id="p-nombre_contacto"
+                    name="nombre_contacto"
+                    type="text"
+                    aria-describedby="p-nombre_contacto-err"
+                    required
+                    autocomplete="name"
+                    maxlength="120"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-nombre_contacto-err"
+                    data-error-for="nombre_contacto"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-telefono">Celular</label>
+                  <input
+                    id="p-telefono"
+                    name="telefono"
+                    type="tel"
+                    aria-describedby="p-telefono-err"
+                    required
+                    inputmode="numeric"
+                    maxlength="9"
+                    autocomplete="tel-national"
+                    placeholder="9XXXXXXXX"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-telefono-err"
+                    data-error-for="telefono"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-distrito">Distrito</label>
+                  <input
+                    id="p-distrito"
+                    name="distrito"
+                    type="text"
+                    aria-describedby="p-distrito-err"
+                    required
+                    maxlength="80"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-distrito-err"
+                    data-error-for="distrito"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="p-direccion">Dirección de entrega</label>
+                  <input
+                    id="p-direccion"
+                    name="direccion"
+                    type="text"
+                    aria-describedby="p-direccion-err"
+                    required
+                    maxlength="200"
+                    autocomplete="street-address"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-direccion-err"
+                    data-error-for="direccion"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="p-referencia">Referencia (opcional)</label>
+                  <input
+                    id="p-referencia"
+                    name="referencia"
+                    type="text"
+                    aria-describedby="p-referencia-err"
+                    maxlength="200"
+                    placeholder="Frente al parque, casa de reja negra…"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-referencia-err"
+                    data-error-for="referencia"
+                    role="alert"
+                  ></p>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="grupo">
+              <legend>Pedido y pago</legend>
+              <div class="form-grid">
+                <div class="campo">
+                  <label for="p-sede_atencion">Sede que atiende</label>
+                  <select
+                    id="p-sede_atencion"
+                    name="sede_atencion"
+                    required
+                    aria-describedby="p-sede_atencion-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="Sede Central">Sede Central</option>
+                    <option value="Sede Norte">Sede Norte</option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="p-sede_atencion-err"
+                    data-error-for="sede_atencion"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-fecha_entrega">Fecha de entrega</label>
+                  <input
+                    id="p-fecha_entrega"
+                    name="fecha_entrega"
+                    type="date"
+                    aria-describedby="p-fecha_entrega-err"
+                    required
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-fecha_entrega-err"
+                    data-error-for="fecha_entrega"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-franja_horaria">Franja horaria</label>
+                  <select
+                    id="p-franja_horaria"
+                    name="franja_horaria"
+                    required
+                    aria-describedby="p-franja_horaria-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="8:00 - 12:00">8:00 - 12:00</option>
+                    <option value="12:00 - 16:00">12:00 - 16:00</option>
+                    <option value="16:00 - 20:00">16:00 - 20:00</option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="p-franja_horaria-err"
+                    data-error-for="franja_horaria"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-metodo_pago">Método de pago</label>
+                  <select
+                    id="p-metodo_pago"
+                    name="metodo_pago"
+                    required
+                    aria-describedby="p-metodo_pago-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Yape / Plin">Yape / Plin</option>
+                    <option value="Tarjeta contra entrega">
+                      Tarjeta contra entrega
+                    </option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="p-metodo_pago-err"
+                    data-error-for="metodo_pago"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="p-detalle_pedido">Productos del pedido</label>
+                  <textarea
+                    id="p-detalle_pedido"
+                    name="detalle_pedido"
+                    required
+                    aria-describedby="p-detalle_pedido-err"
+                    maxlength="1000"
+                  ></textarea>
+                  <p
+                    class="campo__error"
+                    id="p-detalle_pedido-err"
+                    data-error-for="detalle_pedido"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-total">Total (S/)</label>
+                  <input
+                    id="p-total"
+                    name="total"
+                    type="number"
+                    aria-describedby="p-total-err"
+                    required
+                    min="0.01"
+                    step="0.01"
+                    inputmode="decimal"
+                  />
+                  <p
+                    class="campo__error"
+                    id="p-total-err"
+                    data-error-for="total"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="p-estado">Estado</label>
+                  <select
+                    id="p-estado"
+                    name="estado"
+                    required
+                    aria-describedby="p-estado-err"
+                  >
+                    <option value="registrado">registrado</option>
+                    <option value="atendido">atendido</option>
+                    <option value="rechazado">rechazado</option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="p-estado-err"
+                    data-error-for="estado"
+                    role="alert"
+                  ></p>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="dialogo__pie">
+            <button type="button" class="btn btn--borde" id="btnCancelar">
+              Cancelar</button
+            ><button type="submit" class="btn btn--primario">Guardar</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog
+        id="dlgEliminar"
+        class="dialogo--peligro"
+        aria-labelledby="t-elim"
+      >
+        <div class="dialogo__cab"><h2 id="t-elim">Eliminar pedido</h2></div>
+        <p id="textoEliminar"></p>
+        <div class="dialogo__pie">
+          <button type="button" class="btn btn--borde" id="btnNoEliminar">
+            Cancelar</button
+          ><button type="button" class="btn btn--peligro" id="btnSiEliminar">
+            Sí, eliminar
+          </button>
+        </div>
+      </dialog>
+    </main>
+    <footer class="footer">
+      <div class="contenedor footer__cols">
+        <div>
+          <a class="logo" href="index.html"
+            ><img
+              src="img/logo-cesta.svg"
+              alt=""
+              width="62"
+              height="50"
+            />Mega<span>Mercado</span></a
+          >
+          <p>Tu supermercado de confianza. Compra en línea y recibe en casa.</p>
+        </div>
+        <div>
+          <h2>Compra</h2>
+          <ul>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html?cat=ofertas">Ofertas</a></li>
+            <li><a href="registro.html">Solicitar delivery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Mi cuenta</h2>
+          <ul>
+            <li><a href="login.html">Iniciar sesión</a></li>
+            <li><a href="login.html#cuenta">Crear cuenta</a></li>
+            <li><a href="consulta.html">Mis pedidos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Atención</h2>
+          <ul>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>Todos los días</li>
+            <li>8:00 am - 10:00 pm</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__copy">© 2026 MegaMercado Perú</p>
+    </footer>
+    <script type="module" src="js/auth/sesion-ui.js"></script>
+    <script type="module" src="js/panel/panel.js"></script>
+  </body>
+</html>

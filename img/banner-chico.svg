@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><rect width="600" height="300" fill="#231F1C"/><rect x="0" y="288" width="600" height="12" fill="#E0801C"/><g transform="translate(420 150) scale(.8)"><g stroke="#231F1C" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+<path d="M55 78 Q100 -8 145 78" fill="none" stroke-width="8"/>
+<rect x="68" y="38" width="34" height="48" fill="#FFF6E6"/><path d="M68 38 L78 26 H92 L102 38Z" fill="#F7B15C"/>
+<rect x="104" y="52" width="30" height="34" rx="4" fill="#E0801C"/>
+<ellipse cx="128" cy="62" rx="26" ry="11" transform="rotate(-35 128 62)" fill="#F7B15C"/>
+<circle cx="88" cy="78" r="13" fill="#E0801C"/><circle cx="112" cy="80" r="10" fill="#F7D154"/>
+<path d="M30 84 H170 L154 146 H46Z" fill="#231F1C"/><rect x="24" y="76" width="152" height="13" rx="5" fill="#231F1C"/>
+<path d="M62 96 L66 140M84 96 L86 140M106 96 L106 140M128 96 L126 140M150 96 L146 140M40 108 H160M43 124 H157" stroke="#E0801C" stroke-width="3.5" fill="none"/>
+</g></g><text x="28" y="130" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#FFF6E6">Delivery en</text><text x="28" y="176" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#FFF6E6">Trujillo</text><text x="28" y="220" font-family="Georgia, serif" font-size="20" font-weight="400" fill="#E0801C">Recibe tu compra en casa</text></svg>

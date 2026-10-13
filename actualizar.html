@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editar pedido | MegaMercado</title>
+    <meta
+      name="description"
+      content="Editar pedido en MegaMercado, tu supermercado en línea."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/actualizar.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="contenedor">
+        <p>Delivery gratis en compras desde S/ 150</p>
+        <a href="contacto.html">Ver nuestras sedes</a>
+      </div>
+    </div>
+    <header class="header">
+      <div class="contenedor header__main">
+        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"
+          ><img
+            src="img/logo-cesta.svg"
+            alt=""
+            width="62"
+            height="50"
+          />Mega<span>Mercado</span></a
+        >
+        <form
+          class="buscador"
+          role="search"
+          action="catalogo.html"
+          method="get"
+        >
+          <label class="sr-only" for="q">Buscar productos</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="¿Qué estás buscando hoy?"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+        <div class="header__acciones">
+          <a class="cuenta" id="enlaceCuenta" href="login.html"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg
+            ><span
+              ><span class="cuenta__saludo">Hola</span
+              ><span class="cuenta__accion">Iniciar sesión</span></span
+            ></a
+          >
+          <button type="button" class="salir" id="botonSalir" hidden>
+            Salir
+          </button>
+          <a class="carrito" href="registro.html" aria-label="Mi pedido"
+            ><span class="sr-only">Productos en mi pedido:</span
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6"
+              />
+              <circle cx="10" cy="20.5" r="1.3" />
+              <circle cx="18" cy="20.5" r="1.3" /></svg
+            ><span class="carrito__contador" id="contadorCarrito">0</span></a
+          >
+        </div>
+      </div>
+      <nav class="nav" aria-label="Principal">
+        <div class="contenedor">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="registro.html">Delivery</a></li>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>
+              <a class="nav__oferta" href="catalogo.html?cat=ofertas"
+                >Ofertas de la semana</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main id="contenido">
+      <div class="contenedor pagina">
+        <h1>Editar pedido <span id="tituloCodigo"></span></h1>
+        <p class="pagina__sub">
+          Solo puedes cambiar tus pedidos mientras estén en estado «registrado».
+        </p>
+        <p id="avisoEstado" class="aviso aviso--info" role="status" hidden></p>
+        <p id="avisoError" class="aviso aviso--error" role="alert" hidden></p>
+        <div class="pedido pedido--uno">
+          <form id="formPedido" novalidate>
+            <fieldset class="grupo">
+              <legend>Contacto y dirección</legend>
+              <div class="form-grid">
+                <div class="campo ancho">
+                  <label for="a-nombre_contacto">Nombre de quien recibe</label>
+                  <input
+                    id="a-nombre_contacto"
+                    name="nombre_contacto"
+                    type="text"
+                    aria-describedby="a-nombre_contacto-err"
+                    required
+                    autocomplete="name"
+                    maxlength="120"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-nombre_contacto-err"
+                    data-error-for="nombre_contacto"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-telefono">Celular</label>
+                  <input
+                    id="a-telefono"
+                    name="telefono"
+                    type="tel"
+                    aria-describedby="a-telefono-err"
+                    required
+                    inputmode="numeric"
+                    maxlength="9"
+                    autocomplete="tel-national"
+                    placeholder="9XXXXXXXX"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-telefono-err"
+                    data-error-for="telefono"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-distrito">Distrito</label>
+                  <input
+                    id="a-distrito"
+                    name="distrito"
+                    type="text"
+                    aria-describedby="a-distrito-err"
+                    required
+                    maxlength="80"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-distrito-err"
+                    data-error-for="distrito"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="a-direccion">Dirección de entrega</label>
+                  <input
+                    id="a-direccion"
+                    name="direccion"
+                    type="text"
+                    aria-describedby="a-direccion-err"
+                    required
+                    maxlength="200"
+                    autocomplete="street-address"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-direccion-err"
+                    data-error-for="direccion"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="a-referencia">Referencia (opcional)</label>
+                  <input
+                    id="a-referencia"
+                    name="referencia"
+                    type="text"
+                    aria-describedby="a-referencia-err"
+                    maxlength="200"
+                    placeholder="Frente al parque, casa de reja negra…"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-referencia-err"
+                    data-error-for="referencia"
+                    role="alert"
+                  ></p>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="grupo">
+              <legend>Pedido y pago</legend>
+              <div class="form-grid">
+                <div class="campo">
+                  <label for="a-sede_atencion">Sede que atiende</label>
+                  <select
+                    id="a-sede_atencion"
+                    name="sede_atencion"
+                    required
+                    aria-describedby="a-sede_atencion-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="Sede Central">Sede Central</option>
+                    <option value="Sede Norte">Sede Norte</option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="a-sede_atencion-err"
+                    data-error-for="sede_atencion"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-fecha_entrega">Fecha de entrega</label>
+                  <input
+                    id="a-fecha_entrega"
+                    name="fecha_entrega"
+                    type="date"
+                    aria-describedby="a-fecha_entrega-err"
+                    required
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-fecha_entrega-err"
+                    data-error-for="fecha_entrega"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-franja_horaria">Franja horaria</label>
+                  <select
+                    id="a-franja_horaria"
+                    name="franja_horaria"
+                    required
+                    aria-describedby="a-franja_horaria-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="8:00 - 12:00">8:00 - 12:00</option>
+                    <option value="12:00 - 16:00">12:00 - 16:00</option>
+                    <option value="16:00 - 20:00">16:00 - 20:00</option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="a-franja_horaria-err"
+                    data-error-for="franja_horaria"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-metodo_pago">Método de pago</label>
+                  <select
+                    id="a-metodo_pago"
+                    name="metodo_pago"
+                    required
+                    aria-describedby="a-metodo_pago-err"
+                  >
+                    <option value="">Elige una opción</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Yape / Plin">Yape / Plin</option>
+                    <option value="Tarjeta contra entrega">
+                      Tarjeta contra entrega
+                    </option>
+                  </select>
+                  <p
+                    class="campo__error"
+                    id="a-metodo_pago-err"
+                    data-error-for="metodo_pago"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo ancho">
+                  <label for="a-detalle_pedido">Productos del pedido</label>
+                  <textarea
+                    id="a-detalle_pedido"
+                    name="detalle_pedido"
+                    required
+                    aria-describedby="a-detalle_pedido-err"
+                    maxlength="1000"
+                  ></textarea>
+                  <p
+                    class="campo__error"
+                    id="a-detalle_pedido-err"
+                    data-error-for="detalle_pedido"
+                    role="alert"
+                  ></p>
+                </div>
+                <div class="campo">
+                  <label for="a-total">Total (S/)</label>
+                  <input
+                    id="a-total"
+                    name="total"
+                    type="number"
+                    aria-describedby="a-total-err"
+                    required
+                    min="0.01"
+                    step="0.01"
+                    inputmode="decimal"
+                  />
+                  <p
+                    class="campo__error"
+                    id="a-total-err"
+                    data-error-for="total"
+                    role="alert"
+                  ></p>
+                </div>
+              </div>
+            </fieldset>
+            <div class="acciones-form">
+              <button type="submit" class="btn btn--primario">
+                Guardar cambios</button
+              ><a class="btn btn--borde" href="consulta.html"
+                >Volver a mis pedidos</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="contenedor footer__cols">
+        <div>
+          <a class="logo" href="index.html"
+            ><img
+              src="img/logo-cesta.svg"
+              alt=""
+              width="62"
+              height="50"
+            />Mega<span>Mercado</span></a
+          >
+          <p>Tu supermercado de confianza. Compra en línea y recibe en casa.</p>
+        </div>
+        <div>
+          <h2>Compra</h2>
+          <ul>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html?cat=ofertas">Ofertas</a></li>
+            <li><a href="registro.html">Solicitar delivery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Mi cuenta</h2>
+          <ul>
+            <li><a href="login.html">Iniciar sesión</a></li>
+            <li><a href="login.html#cuenta">Crear cuenta</a></li>
+            <li><a href="consulta.html">Mis pedidos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Atención</h2>
+          <ul>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>Todos los días</li>
+            <li>8:00 am - 10:00 pm</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__copy">© 2026 MegaMercado Perú</p>
+    </footer>
+    <script type="module" src="js/auth/sesion-ui.js"></script>
+    <script type="module" src="js/actualizar/actualizar.js"></script>
+  </body>
+</html>

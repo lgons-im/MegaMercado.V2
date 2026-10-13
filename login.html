@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar sesión | MegaMercado</title>
+    <meta
+      name="description"
+      content="Iniciar sesión en MegaMercado, tu supermercado en línea."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="contenedor">
+        <p>Delivery gratis en compras desde S/ 150</p>
+        <a href="contacto.html">Ver nuestras sedes</a>
+      </div>
+    </div>
+    <header class="header">
+      <div class="contenedor header__main">
+        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"
+          ><img
+            src="img/logo-cesta.svg"
+            alt=""
+            width="62"
+            height="50"
+          />Mega<span>Mercado</span></a
+        >
+        <form
+          class="buscador"
+          role="search"
+          action="catalogo.html"
+          method="get"
+        >
+          <label class="sr-only" for="q">Buscar productos</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="¿Qué estás buscando hoy?"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+        <div class="header__acciones">
+          <a class="cuenta" id="enlaceCuenta" href="login.html"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg
+            ><span
+              ><span class="cuenta__saludo">Hola</span
+              ><span class="cuenta__accion">Iniciar sesión</span></span
+            ></a
+          >
+          <button type="button" class="salir" id="botonSalir" hidden>
+            Salir
+          </button>
+          <a class="carrito" href="registro.html" aria-label="Mi pedido"
+            ><span class="sr-only">Productos en mi pedido:</span
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6"
+              />
+              <circle cx="10" cy="20.5" r="1.3" />
+              <circle cx="18" cy="20.5" r="1.3" /></svg
+            ><span class="carrito__contador" id="contadorCarrito">0</span></a
+          >
+        </div>
+      </div>
+      <nav class="nav" aria-label="Principal">
+        <div class="contenedor">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="registro.html">Delivery</a></li>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>
+              <a class="nav__oferta" href="catalogo.html?cat=ofertas"
+                >Ofertas de la semana</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main id="contenido">
+      <div class="contenedor">
+        <div class="acceso">
+          <div class="acceso__tabs" role="tablist" aria-label="Acceso">
+            <button
+              type="button"
+              class="acceso__tab"
+              role="tab"
+              id="tab-login"
+              aria-controls="panel-login"
+              aria-selected="true"
+              data-tab="login"
+            >
+              Iniciar sesión
+            </button>
+            <button
+              type="button"
+              class="acceso__tab"
+              role="tab"
+              id="tab-cuenta"
+              aria-controls="panel-cuenta"
+              aria-selected="false"
+              data-tab="cuenta"
+            >
+              Crear cuenta
+            </button>
+          </div>
+
+          <section
+            class="acceso__panel"
+            role="tabpanel"
+            id="panel-login"
+            aria-labelledby="tab-login"
+          >
+            <h1>Inicia sesión para comprar</h1>
+            <p id="avisoLogin" class="aviso" role="alert" hidden></p>
+            <form id="formLogin" novalidate>
+              <div class="campo">
+                <label for="l-correo">Correo electrónico</label
+                ><input
+                  id="l-correo"
+                  name="correo"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="Ingresa tu correo electrónico"
+                  required
+                />
+              </div>
+              <div class="campo">
+                <label for="l-clave">Contraseña</label
+                ><input
+                  id="l-clave"
+                  name="contrasena"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="Ingresa tu contraseña"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn--primario btn--bloque">
+                Ingresar
+              </button>
+            </form>
+            <p class="acceso__pie">
+              ¿Aún no tienes cuenta?
+              <button type="button" id="irACuenta">Regístrate</button>
+            </p>
+          </section>
+
+          <section
+            class="acceso__panel"
+            role="tabpanel"
+            id="panel-cuenta"
+            aria-labelledby="tab-cuenta"
+            hidden
+          >
+            <h1>Crea tu cuenta</h1>
+            <p id="avisoCuenta" class="aviso" role="alert" hidden></p>
+            <form id="formCuenta" novalidate>
+              <div class="campo">
+                <label for="c-nombre">Nombre completo</label
+                ><input
+                  id="c-nombre"
+                  name="nombre"
+                  type="text"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <div class="campo">
+                <label for="c-correo">Correo electrónico</label
+                ><input
+                  id="c-correo"
+                  name="correo"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+              <div class="campo">
+                <label for="c-clave">Contraseña (mínimo 6 caracteres)</label
+                ><input
+                  id="c-clave"
+                  name="contrasena"
+                  type="password"
+                  autocomplete="new-password"
+                  minlength="6"
+                  required
+                />
+              </div>
+              <div class="campo">
+                <label for="c-repetir">Repite la contraseña</label
+                ><input
+                  id="c-repetir"
+                  name="repetir"
+                  type="password"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn--primario btn--bloque">
+                Crear cuenta
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="contenedor footer__cols">
+        <div>
+          <a class="logo" href="index.html"
+            ><img
+              src="img/logo-cesta.svg"
+              alt=""
+              width="62"
+              height="50"
+            />Mega<span>Mercado</span></a
+          >
+          <p>Tu supermercado de confianza. Compra en línea y recibe en casa.</p>
+        </div>
+        <div>
+          <h2>Compra</h2>
+          <ul>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html?cat=ofertas">Ofertas</a></li>
+            <li><a href="registro.html">Solicitar delivery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Mi cuenta</h2>
+          <ul>
+            <li><a href="login.html">Iniciar sesión</a></li>
+            <li><a href="login.html#cuenta">Crear cuenta</a></li>
+            <li><a href="consulta.html">Mis pedidos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Atención</h2>
+          <ul>
+            <li><a href="contacto.html">Sedes</a></li>
+            <li>Todos los días</li>
+            <li>8:00 am - 10:00 pm</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__copy">© 2026 MegaMercado Perú</p>
+    </footer>
+    <script type="module" src="js/auth/sesion-ui.js"></script>
+    <script type="module" src="js/auth/login.js"></script>
+  </body>
+</html>

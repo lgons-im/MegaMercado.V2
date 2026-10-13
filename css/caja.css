@@ -1,0 +1,165 @@
+:root {
+    --fondo: #f6f8f5;
+    --tinta: #17261c;
+    --verde: #1f6b3a;
+    --borde: #c9d6cc;
+    --error: #b3261e;
+    --rechazo: #fbe9e7;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --fondo: #111a14;
+        --tinta: #e8f0ea;
+        --verde: #5fc287;
+        --borde: #2f4235;
+        --error: #ff8a80;
+        --rechazo: #3a1d1a;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, "Segoe UI", sans-serif;
+    background: var(--fondo);
+    color: var(--tinta);
+    line-height: 1.5;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .75rem 1.5rem;
+    border-bottom: 1px solid var(--borde);
+}
+
+header p {
+    margin: 0;
+    font-weight: 700;
+}
+
+main {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+}
+
+section {
+    margin-bottom: 2.5rem;
+}
+
+h1 {
+    font-size: 1.75rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-top: .75rem;
+    font-weight: 600;
+}
+
+label.check {
+    font-weight: 400;
+}
+
+input:not([type="checkbox"]),
+select {
+    width: 100%;
+    max-width: 24rem;
+    padding: .55rem;
+    margin-top: .25rem;
+    font: inherit;
+    border: 1px solid var(--borde);
+    background: transparent;
+    color: inherit;
+}
+
+button {
+    padding: .55rem 1.1rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--verde);
+    color: #fff;
+    border: 0;
+}
+
+button.secundario {
+    background: transparent;
+    color: var(--tinta);
+    border: 1px solid var(--borde);
+}
+
+button:disabled {
+    opacity: .6;
+}
+
+:focus-visible {
+    outline: 3px solid var(--verde);
+    outline-offset: 2px;
+}
+
+.tabla-scroll {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+caption {
+    text-align: left;
+    font-weight: 700;
+    padding-bottom: .4rem;
+}
+
+th,
+td {
+    text-align: left;
+    padding: .5rem .6rem;
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
+}
+
+.fila-rechazada {
+    background: var(--rechazo);
+}
+
+.fila-rechazada td:nth-child(7) {
+    color: var(--error);
+    white-space: normal;
+}
+
+dialog {
+    border: 1px solid var(--borde);
+    background: var(--fondo);
+    color: var(--tinta);
+    padding: 1.25rem;
+    max-width: 26rem;
+    width: 90%;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, .5);
+}
+
+.botones {
+    display: flex;
+    gap: .75rem;
+    margin-top: 1.25rem;
+}
+
+[hidden] {
+    display: none !important;
+}

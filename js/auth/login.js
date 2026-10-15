@@ -1,4 +1,4 @@
-import { registrarUsuario, iniciarSesion, obtenerSesion } from './auth.js';
+import { registrarUsuario, iniciarSesion, obtenerSesion, rutaInicioSegunRol } from './auth.js';
 
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 const paneles = [...document.querySelectorAll('[role="tabpanel"]')];
@@ -8,7 +8,9 @@ const avisoLogin = document.getElementById('avisoLogin');
 const avisoCuenta = document.getElementById('avisoCuenta');
 
 function irARol(u) {
-  window.location.href = u.rol === 'cliente' ? 'registro.html' : 'panel.html';
+  const volver = sessionStorage.getItem('volver_a');
+  sessionStorage.removeItem('volver_a');
+  window.location.href = (volver && u.rol === 'cliente') ? volver : rutaInicioSegunRol(u.rol);
 }
 const ya = obtenerSesion();
 if (ya) irARol(ya);
@@ -33,6 +35,10 @@ function aviso(el, texto, tipo) {
   el.textContent = texto;
   el.className = 'aviso aviso--' + tipo;
   el.hidden = !texto;
+}
+
+if (new URLSearchParams(location.search).get('aviso') === 'sesion') {
+  aviso(avisoLogin, 'Inicia sesión o crea tu cuenta para continuar con tu pedido.', 'info');
 }
 
 formLogin.addEventListener('submit', async (e) => {

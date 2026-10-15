@@ -34,7 +34,7 @@ async function registrarRechazo({ registro, usuario, metodo, proveedor = null, m
 function motivoDesdeError(error) {
   if (error.code === '23514') return 'Saldo insuficiente al momento de confirmar.';
   if (error.code === '23505') return 'Esta solicitud ya fue pagada.';
-  return 'Error de comunicación con la entidad. No se realizó ningún cargo.';
+  return `Error técnico: ${error.message ?? error}`.slice(0, 115);
 }
 
 function confirmarCobro({ actualizarSaldo, registro, usuario, codigo, metodo, proveedor = null, marca = null, referencia, monto }) {

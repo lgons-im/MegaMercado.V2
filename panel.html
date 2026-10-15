@@ -159,7 +159,8 @@
                 <th scope="col">Entrega en</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Detalle</th>
-                <th scope="col">Total</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Pago</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -173,6 +174,10 @@
         <div class="dialogo__cab"><h2 id="tituloDialogo"></h2></div>
         <form id="formRegistro" novalidate>
           <div class="dialogo__cuerpo">
+            <p id="avisoPagado" class="aviso aviso--info" role="status" hidden>
+              Este pedido ya fue pagado: el peso y el monto no se pueden
+              cambiar.
+            </p>
             <fieldset class="grupo">
               <legend>Contacto y dirección</legend>
               <div class="form-grid">
@@ -269,7 +274,7 @@
               </div>
             </fieldset>
             <fieldset class="grupo">
-              <legend>Pedido y pago</legend>
+              <legend>Pedido y delivery</legend>
               <div class="form-grid">
                 <div class="campo">
                   <label for="p-sede_atencion">Sede que atiende</label>
@@ -326,28 +331,6 @@
                     role="alert"
                   ></p>
                 </div>
-                <div class="campo">
-                  <label for="p-metodo_pago">Método de pago</label>
-                  <select
-                    id="p-metodo_pago"
-                    name="metodo_pago"
-                    required
-                    aria-describedby="p-metodo_pago-err"
-                  >
-                    <option value="">Elige una opción</option>
-                    <option value="Efectivo">Efectivo</option>
-                    <option value="Yape / Plin">Yape / Plin</option>
-                    <option value="Tarjeta contra entrega">
-                      Tarjeta contra entrega
-                    </option>
-                  </select>
-                  <p
-                    class="campo__error"
-                    id="p-metodo_pago-err"
-                    data-error-for="metodo_pago"
-                    role="alert"
-                  ></p>
-                </div>
                 <div class="campo ancho">
                   <label for="p-detalle_pedido">Productos del pedido</label>
                   <textarea
@@ -365,23 +348,30 @@
                   ></p>
                 </div>
                 <div class="campo">
-                  <label for="p-total">Total (S/)</label>
+                  <label for="p-peso_kg">Peso estimado (kg)</label>
                   <input
-                    id="p-total"
-                    name="total"
+                    id="p-peso_kg"
+                    name="peso_kg"
                     type="number"
-                    aria-describedby="p-total-err"
+                    aria-describedby="p-peso_kg-err"
                     required
-                    min="0.01"
-                    step="0.01"
+                    min="0.1"
+                    max="100"
+                    step="0.1"
                     inputmode="decimal"
                   />
                   <p
                     class="campo__error"
-                    id="p-total-err"
-                    data-error-for="total"
+                    id="p-peso_kg-err"
+                    data-error-for="peso_kg"
                     role="alert"
                   ></p>
+                </div>
+                <div class="campo">
+                  <label
+                    ><input type="checkbox" name="incluye_congelados" /> Incluye
+                    productos congelados</label
+                  >
                 </div>
                 <div class="campo">
                   <label for="p-estado">Estado</label>
@@ -401,6 +391,14 @@
                     data-error-for="estado"
                     role="alert"
                   ></p>
+                </div>
+                <div class="campo ancho">
+                  <p>
+                    Costo de delivery:
+                    <output id="monto-estimado" aria-live="polite"
+                      >S/ 0.00</output
+                    >
+                  </p>
                 </div>
               </div>
             </fieldset>

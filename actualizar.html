@@ -109,7 +109,8 @@
       <div class="contenedor pagina">
         <h1>Editar pedido <span id="tituloCodigo"></span></h1>
         <p class="pagina__sub">
-          Solo puedes cambiar tus pedidos mientras estén en estado «registrado».
+          Solo puedes cambiar tus pedidos mientras estén en estado «registrado»
+          y sin pagar.
         </p>
         <p id="avisoEstado" class="aviso aviso--info" role="status" hidden></p>
         <p id="avisoError" class="aviso aviso--error" role="alert" hidden></p>
@@ -211,7 +212,7 @@
               </div>
             </fieldset>
             <fieldset class="grupo">
-              <legend>Pedido y pago</legend>
+              <legend>Pedido y delivery</legend>
               <div class="form-grid">
                 <div class="campo">
                   <label for="a-sede_atencion">Sede que atiende</label>
@@ -268,28 +269,6 @@
                     role="alert"
                   ></p>
                 </div>
-                <div class="campo">
-                  <label for="a-metodo_pago">Método de pago</label>
-                  <select
-                    id="a-metodo_pago"
-                    name="metodo_pago"
-                    required
-                    aria-describedby="a-metodo_pago-err"
-                  >
-                    <option value="">Elige una opción</option>
-                    <option value="Efectivo">Efectivo</option>
-                    <option value="Yape / Plin">Yape / Plin</option>
-                    <option value="Tarjeta contra entrega">
-                      Tarjeta contra entrega
-                    </option>
-                  </select>
-                  <p
-                    class="campo__error"
-                    id="a-metodo_pago-err"
-                    data-error-for="metodo_pago"
-                    role="alert"
-                  ></p>
-                </div>
                 <div class="campo ancho">
                   <label for="a-detalle_pedido">Productos del pedido</label>
                   <textarea
@@ -307,23 +286,38 @@
                   ></p>
                 </div>
                 <div class="campo">
-                  <label for="a-total">Total (S/)</label>
+                  <label for="a-peso_kg">Peso estimado (kg)</label>
                   <input
-                    id="a-total"
-                    name="total"
+                    id="a-peso_kg"
+                    name="peso_kg"
                     type="number"
-                    aria-describedby="a-total-err"
+                    aria-describedby="a-peso_kg-err"
                     required
-                    min="0.01"
-                    step="0.01"
+                    min="0.1"
+                    max="100"
+                    step="0.1"
                     inputmode="decimal"
                   />
                   <p
                     class="campo__error"
-                    id="a-total-err"
-                    data-error-for="total"
+                    id="a-peso_kg-err"
+                    data-error-for="peso_kg"
                     role="alert"
                   ></p>
+                </div>
+                <div class="campo">
+                  <label
+                    ><input type="checkbox" name="incluye_congelados" /> Incluye
+                    productos congelados</label
+                  >
+                </div>
+                <div class="campo ancho">
+                  <p>
+                    Costo de delivery:
+                    <output id="monto-estimado" aria-live="polite"
+                      >S/ 0.00</output
+                    >
+                  </p>
                 </div>
               </div>
             </fieldset>

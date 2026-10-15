@@ -19,22 +19,36 @@ export async function iniciarSesion(correo, contrasena) {
 
 export function cerrarSesion() {
   sessionStorage.removeItem('usuario');
+  sessionStorage.removeItem('volver_a');
+  window.location.href = 'login.html';
 }
 
 export function obtenerSesion() {
   try { return JSON.parse(sessionStorage.getItem('usuario')); } catch { return null; }
 }
 
+export function rutaInicioSegunRol(rol) {
+  const rutas = {
+    cliente: 'registro.html',
+    administrador: 'panel.html',
+    empleado: 'panel.html',
+    cajero: 'caja.html'
+  };
+  return rutas[rol] ?? 'index.html';
+}
 
 export function exigirSesion(rolesPermitidos = null) {
   const u = obtenerSesion();
   if (!u) {
-    window.location.replace('login.html');
+    sessionStorage.setItem('volver_a', location.pathname.split('/').pop() + location.search);
+    window.location.replace('login.html?aviso=sesion');
     throw new Error('Sesión requerida');
   }
   if (rolesPermitidos && !rolesPermitidos.includes(u.rol)) {
-    window.location.replace(u.rol === 'cliente' ? 'registro.html' : 'panel.html');
+    window.location.replace(rutaInicioSegunRol(u.rol));
     throw new Error('Rol no permitido en esta página');
   }
   return u;
 }
+
+export const exigirRol = (...roles) => exigirSesion(roles);

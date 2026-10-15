@@ -1,83 +1,134 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagar delivery | MegaMercado Perú</title>
-  <link rel="stylesheet" href="css/pago.css">
-</head>
-<body>
-  <header>
-    <nav aria-label="Navegación principal">
-      <a href="registro.html">Nuevo pedido</a>
-      <a href="consulta.html">Mis pedidos</a>
-      <a href="pago.html" aria-current="page">Pagar</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagar delivery | MegaMercado Perú</title>
+    <link rel="stylesheet" href="css/pago.css" />
+  </head>
+  <body>
+    <header>
+      <nav aria-label="Navegación principal">
+        <a href="registro.html">Nuevo pedido</a>
+        <a href="consulta.html">Mis pedidos</a>
+        <a href="pago.html" aria-current="page">Pagar</a>
+      </nav>
+    </header>
 
-  <main>
-    <h1>Pago del delivery</h1>
+    <main>
+      <h1>Pago del delivery</h1>
 
-    <section aria-labelledby="t-resumen">
-      <h2 id="t-resumen">Resumen</h2>
-      <label for="registro">Pedido a pagar</label>
-      <select id="registro" name="registro"></select>
-      <p>Total a pagar: <strong id="resumen-monto">—</strong></p>
-    </section>
+      <section aria-labelledby="t-resumen">
+        <h2 id="t-resumen">Resumen</h2>
+        <label for="registro">Pedido a pagar</label>
+        <select id="registro" name="registro"></select>
+        <p>Total a pagar: <strong id="resumen-monto">—</strong></p>
+      </section>
 
-    <fieldset>
-      <legend>Método de pago</legend>
-      <label><input type="radio" name="metodo" value="tarjeta" checked> Tarjeta de débito o crédito</label>
-      <label><input type="radio" name="metodo" value="billetera"> Billetera electrónica</label>
-    </fieldset>
+      <fieldset>
+        <legend>Método de pago</legend>
+        <label
+          ><input type="radio" name="metodo" value="tarjeta" checked /> Tarjeta
+          de débito o crédito</label
+        >
+        <label
+          ><input type="radio" name="metodo" value="billetera" /> Billetera
+          electrónica</label
+        >
+      </fieldset>
 
-    <form id="form-tarjeta" novalidate>
-      <label for="numero">Número de tarjeta</label>
-      <input id="numero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="23"
-             required aria-describedby="marca-detectada error-numero">
-      <span id="marca-detectada"></span>
-      <span id="error-numero" class="error"></span>
+      <form id="form-tarjeta" novalidate>
+        <label for="numero">Número de tarjeta</label>
+        <input
+          id="numero"
+          name="numero"
+          inputmode="numeric"
+          autocomplete="cc-number"
+          maxlength="23"
+          required
+          aria-describedby="marca-detectada error-numero"
+        />
+        <span id="marca-detectada"></span>
+        <span id="error-numero" class="error"></span>
 
-      <label for="vencimiento">Vencimiento (MM/AA)</label>
-      <input id="vencimiento" name="vencimiento" inputmode="numeric" autocomplete="cc-exp" maxlength="5"
-             placeholder="MM/AA" required aria-describedby="error-vencimiento">
-      <span id="error-vencimiento" class="error"></span>
+        <label for="vencimiento">Vencimiento (MM/AA)</label>
+        <input
+          id="vencimiento"
+          name="vencimiento"
+          inputmode="numeric"
+          autocomplete="cc-exp"
+          maxlength="5"
+          placeholder="MM/AA"
+          required
+          aria-describedby="error-vencimiento"
+        />
+        <span id="error-vencimiento" class="error"></span>
 
-      <label for="cvv">CVV</label>
-      <input id="cvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"
-             required aria-describedby="error-cvv">
-      <span id="error-cvv" class="error"></span>
+        <label for="cvv">CVV</label>
+        <input
+          id="cvv"
+          name="cvv"
+          type="password"
+          inputmode="numeric"
+          autocomplete="cc-csc"
+          maxlength="4"
+          required
+          aria-describedby="error-cvv"
+        />
+        <span id="error-cvv" class="error"></span>
 
-      <label for="titular">Nombre del titular</label>
-      <input id="titular" name="titular" autocomplete="cc-name" required aria-describedby="error-titular">
-      <span id="error-titular" class="error"></span>
+        <label for="titular">Nombre del titular</label>
+        <input
+          id="titular"
+          name="titular"
+          autocomplete="cc-name"
+          required
+          aria-describedby="error-titular"
+        />
+        <span id="error-titular" class="error"></span>
 
-      <button type="submit">Pagar con tarjeta</button>
-    </form>
+        <button type="submit">Pagar con tarjeta</button>
+      </form>
 
-    <form id="form-billetera" novalidate hidden>
-      <label for="proveedor">Billetera</label>
-      <select id="proveedor" name="proveedor">
-        <option value="andipay">AndiPay</option>
-        <option value="pagomovil">PagoMóvil</option>
-      </select>
+      <form id="form-billetera" novalidate hidden>
+        <label for="proveedor">Billetera</label>
+        <select id="proveedor" name="proveedor">
+          <option value="andipay">AndiPay</option>
+          <option value="pagomovil">PagoMóvil</option>
+        </select>
 
-      <label for="celular">Celular afiliado</label>
-      <input id="celular" name="celular" inputmode="numeric" autocomplete="tel-national" maxlength="9"
-             required aria-describedby="error-celular">
-      <span id="error-celular" class="error"></span>
+        <label for="celular">Celular afiliado</label>
+        <input
+          id="celular"
+          name="celular"
+          inputmode="numeric"
+          autocomplete="tel-national"
+          maxlength="9"
+          required
+          aria-describedby="error-celular"
+        />
+        <span id="error-celular" class="error"></span>
 
-      <label for="codigo">Código de aprobación (6 dígitos que muestra tu billetera)</label>
-      <input id="codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
-             required aria-describedby="error-codigo">
-      <span id="error-codigo" class="error"></span>
+        <label for="codigo"
+          >Código de aprobación (6 dígitos que muestra tu billetera)</label
+        >
+        <input
+          id="codigo"
+          name="codigo"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          maxlength="6"
+          required
+          aria-describedby="error-codigo"
+        />
+        <span id="error-codigo" class="error"></span>
 
-      <button type="submit">Pagar con billetera</button>
-    </form>
+        <button type="submit">Pagar con billetera</button>
+      </form>
 
-    <p id="mensaje-pago" role="status" aria-live="polite"></p>
-  </main>
+      <p id="mensaje-pago" role="status" aria-live="polite"></p>
+    </main>
 
-  <script type="module" src="js/pago/pago.js"></script>
-</body>
+    <script type="module" src="js/pago/pago.js"></script>
+  </body>
 </html>

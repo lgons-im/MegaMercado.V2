@@ -1,6 +1,7 @@
 import { sql } from '../config/neon-config.js';
 import { exigirSesion } from '../auth/auth.js';
 import { leerFormulario, validarPedido, mostrarErrores, llenarFormulario, mostrarToast, escapar, formatearMoneda, formatearFechaISO, hoyISO, normalizar } from '../config/utils.js';
+import { calcularMontoServicio, formatearSoles } from '../registro/tarifario.js';
 
 const usuario = exigirSesion(['administrador', 'empleado']);
 
@@ -8,12 +9,17 @@ export const turnoActual = () => { const h = new Date().getHours(); return h >= 
 const TURNOS = { manana: 'mañana (6:00 a 14:00)', tarde: 'tarde (14:00 a 22:00)', noche: 'noche-madrugada (22:00 a 6:00)' };
 const puedeModificar = usuario.rol === 'administrador' || usuario.turno === turnoActual();
 
+// Adapta los datos del formulario al formato que espera tarifario.js
+const tarifa = (d) => ({ peso_kg: d.peso_kg, incluye_congelados: d.incluye_congelados ? 'on' : '' });
+
 export async function listarTodos() {
   return await sql`
     SELECT p.id, p.codigo_seguimiento, p.id_usuario, u.nombre AS cliente,
            p.nombre_contacto, p.telefono, p.direccion, p.distrito, p.referencia, p.sede_atencion,
            to_char(p.fecha_entrega, 'YYYY-MM-DD') AS fecha_entrega, p.franja_horaria, p.metodo_pago,
            p.detalle_pedido, p.total::float AS total, p.estado,
+           p.monto_calculado::float AS monto, p.estado_pago, p.canal_pago,
+           p.peso_kg::float AS peso_kg, p.incluye_congelados,
            to_char(p.fecha_registro, 'DD/MM/YYYY HH24:MI') AS fecha_txt
     FROM pedidos_delivery_megamercado p
     LEFT JOIN usuarios u ON u.id = p.id_usuario
@@ -23,30 +29,62 @@ export async function listarTodos() {
 
 export async function crearRegistro(d) {
   const codigo = 'COD-' + Date.now().toString().slice(-8);
+  const monto = calcularMontoServicio(tarifa(d));
   await sql`
     INSERT INTO pedidos_delivery_megamercado
       (codigo_seguimiento, nombre_contacto, telefono, direccion, distrito, referencia, sede_atencion,
-       fecha_entrega, franja_horaria, metodo_pago, detalle_pedido, total, estado)
+       fecha_entrega, franja_horaria, metodo_pago, detalle_pedido,
+       peso_kg, incluye_congelados, total, monto_calculado, estado_pago, estado)
     VALUES
       (${codigo}, ${d.nombre_contacto}, ${d.telefono}, ${d.direccion}, ${d.distrito}, ${d.referencia || null}, ${d.sede_atencion},
-       ${d.fecha_entrega}, ${d.franja_horaria}, ${d.metodo_pago}, ${d.detalle_pedido}, ${d.total}, ${d.estado || 'registrado'});
+       ${d.fecha_entrega}, ${d.franja_horaria}, 'pendiente', ${d.detalle_pedido},
+       ${Number(d.peso_kg)}, ${Boolean(d.incluye_congelados)}, ${monto}, ${monto},
+       ${monto === 0 ? 'exonerado' : 'pendiente'}, ${d.estado || 'registrado'});
   `;
-  return codigo;
+  return codigo;   // el cliente presencial paga luego en caja.html buscando este código
 }
 
-export async function actualizarComoPanel(id, d) {
-  await sql`
+// Si el pedido ya está pagado NO se tocan peso, congelados ni monto: el pago ya los respalda.
+// El panel nunca modifica estado_pago a mano.
+export async function actualizarComoPanel(id, d, yaPagado) {
+  if (yaPagado) {
+    await sql`
+      UPDATE pedidos_delivery_megamercado
+      SET nombre_contacto = ${d.nombre_contacto}, telefono = ${d.telefono}, direccion = ${d.direccion},
+          distrito = ${d.distrito}, referencia = ${d.referencia || null}, sede_atencion = ${d.sede_atencion},
+          fecha_entrega = ${d.fecha_entrega}, franja_horaria = ${d.franja_horaria},
+          detalle_pedido = ${d.detalle_pedido}, estado = ${d.estado}
+      WHERE id = ${id};
+    `;
+    return true;
+  }
+  const monto = calcularMontoServicio(tarifa(d));
+  const filas = await sql`
     UPDATE pedidos_delivery_megamercado
     SET nombre_contacto = ${d.nombre_contacto}, telefono = ${d.telefono}, direccion = ${d.direccion},
         distrito = ${d.distrito}, referencia = ${d.referencia || null}, sede_atencion = ${d.sede_atencion},
-        fecha_entrega = ${d.fecha_entrega}, franja_horaria = ${d.franja_horaria}, metodo_pago = ${d.metodo_pago},
-        detalle_pedido = ${d.detalle_pedido}, total = ${d.total}, estado = ${d.estado}
-    WHERE id = ${id};
+        fecha_entrega = ${d.fecha_entrega}, franja_horaria = ${d.franja_horaria},
+        detalle_pedido = ${d.detalle_pedido}, estado = ${d.estado},
+        peso_kg = ${Number(d.peso_kg)}, incluye_congelados = ${Boolean(d.incluye_congelados)},
+        total = ${monto}, monto_calculado = ${monto},
+        estado_pago = ${monto === 0 ? 'exonerado' : 'pendiente'}
+    WHERE id = ${id} AND estado_pago <> 'pagado'
+    RETURNING id;
   `;
+  return filas.length === 1;   // false: se pagó mientras se editaba
 }
 
 export async function eliminarRegistro(id) {
-  await sql`DELETE FROM pedidos_delivery_megamercado WHERE id = ${id};`;
+  try {
+    await sql`DELETE FROM pedidos_delivery_megamercado WHERE id = ${id};`;
+    return { ok: true };
+  } catch (error) {
+    // 23503 = llave foránea: el pedido tiene pagos (aprobados o rechazados)
+    if (error.code === '23503') {
+      return { ok: false, mensaje: 'No se puede eliminar: tiene historial de pagos. Cambia su estado a "rechazado".' };
+    }
+    throw error;
+  }
 }
 
 const cuerpo = document.getElementById('tablaCuerpo');
@@ -57,6 +95,7 @@ const dlgRegistro = document.getElementById('dlgRegistro');
 const dlgEliminar = document.getElementById('dlgEliminar');
 const form = document.getElementById('formRegistro');
 const tituloDialogo = document.getElementById('tituloDialogo');
+const salidaMonto = document.getElementById('monto-estimado');
 let registros = [];
 let editandoId = null;
 let eliminandoId = null;
@@ -70,6 +109,9 @@ avisoTurno.classList.toggle('aviso-turno--bloqueado', !puedeModificar);
 document.getElementById('btnNuevo').disabled = !puedeModificar;
 document.getElementById('nombreUsuario').textContent = usuario.nombre;
 form.fecha_entrega.min = '';
+
+const ETIQUETA_PAGO = { pendiente: 'Pendiente', pagado: 'Pagado', exonerado: 'Exonerado' };
+const ETIQUETA_CANAL = { pasarela: 'En línea', caja: 'Ventanilla' };
 
 function pintarCifras() {
   const cuenta = (e) => registros.filter((r) => r.estado === e).length;
@@ -86,7 +128,7 @@ function pintarTabla() {
     (!q || normalizar([r.codigo_seguimiento, r.nombre_contacto, r.cliente, r.distrito, r.detalle_pedido].join(' ')).includes(q)));
   document.getElementById('conteoTabla').textContent = `${visibles.length} de ${registros.length} pedidos`;
   if (!visibles.length) {
-    cuerpo.innerHTML = `<tr><td colspan="8" class="vacio">No hay pedidos con esos filtros.</td></tr>`;
+    cuerpo.innerHTML = `<tr><td colspan="10" class="vacio">No hay pedidos con esos filtros.</td></tr>`;
     return;
   }
   cuerpo.innerHTML = visibles.map((r) => `
@@ -96,8 +138,9 @@ function pintarTabla() {
       <td>${escapar(r.nombre_contacto)}<span class="sec">${escapar(r.telefono)}</span></td>
       <td>${escapar(r.direccion)}<span class="sec">${escapar(r.distrito)} · ${escapar(r.sede_atencion)}</span></td>
       <td>${formatearFechaISO(r.fecha_entrega)}<span class="sec">${escapar(r.franja_horaria)}</span></td>
-      <td class="detalle">${escapar(r.detalle_pedido)}</td>
-      <td><strong>${formatearMoneda(r.total)}</strong><span class="sec">${escapar(r.metodo_pago)}</span></td>
+      <td class="detalle">${escapar(r.detalle_pedido)}<span class="sec">${escapar(String(r.peso_kg))} kg${r.incluye_congelados ? ' · congelados' : ''}</span></td>
+      <td><strong>${formatearMoneda(r.monto)}</strong></td>
+      <td><span class="estado estado--${escapar(r.estado_pago)}">${escapar(ETIQUETA_PAGO[r.estado_pago] ?? r.estado_pago)}</span>${r.canal_pago ? `<span class="sec">${escapar(ETIQUETA_CANAL[r.canal_pago] ?? r.canal_pago)}</span>` : ''}</td>
       <td><span class="estado estado--${r.estado}">${escapar(r.estado)}</span></td>
       <td class="acciones">
         <button type="button" class="btn btn--chico btn--borde" data-accion="editar" data-id="${r.id}" ${puedeModificar ? '' : 'disabled'} aria-label="Editar ${escapar(r.codigo_seguimiento)}">Editar</button>
@@ -119,13 +162,33 @@ async function recargar() {
   }
 }
 
+function datosTarifaForm() {
+  return { peso_kg: form.elements.peso_kg.value || 0, incluye_congelados: form.elements.incluye_congelados.checked };
+}
+function actualizarCotizacion() {
+  salidaMonto.textContent = formatearSoles(calcularMontoServicio(tarifa(datosTarifaForm())));
+}
+form.addEventListener('input', actualizarCotizacion);
+form.addEventListener('change', actualizarCotizacion);
+
 function abrirFormulario(registro = null) {
   editandoId = registro ? registro.id : null;
   form.reset();
   mostrarErrores(form, {});
+  const pagado = registro?.estado_pago === 'pagado';
+  form.elements.peso_kg.disabled = pagado;
+  form.elements.incluye_congelados.disabled = pagado;
+  document.getElementById('avisoPagado').hidden = !pagado;
   tituloDialogo.textContent = registro ? `Editar ${registro.codigo_seguimiento}` : 'Nuevo pedido (atención presencial o telefónica)';
-  if (registro) llenarFormulario(form, registro);
-  else { form.fecha_entrega.value = hoyISO(); form.estado.value = 'registrado'; }
+  if (registro) {
+    llenarFormulario(form, registro);
+    form.elements.peso_kg.value = registro.peso_kg;
+    form.elements.incluye_congelados.checked = registro.incluye_congelados;
+  } else {
+    form.fecha_entrega.value = hoyISO();
+    form.estado.value = 'registrado';
+  }
+  actualizarCotizacion();
   dlgRegistro.showModal();
 }
 
@@ -148,15 +211,33 @@ cuerpo.addEventListener('click', (e) => {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!puedeModificar) return mostrarToast('Fuera de tu turno no puedes modificar pedidos', 'error');
+  const actual = editandoId ? registros.find((r) => r.id === editandoId) : null;
+  const yaPagado = actual?.estado_pago === 'pagado';
+
   const datos = leerFormulario(form);
-  const errores = validarPedido(datos, editandoId ? registros.find((r) => r.id === editandoId)?.fecha_entrega : null);
+  datos.peso_kg = yaPagado ? actual.peso_kg : form.elements.peso_kg.value;
+  datos.incluye_congelados = yaPagado ? actual.incluye_congelados : form.elements.incluye_congelados.checked;
+  // Campos que ya no están en el formulario pero que validarPedido puede exigir
+  datos.metodo_pago = actual?.metodo_pago ?? 'pendiente';
+  datos.total = yaPagado ? actual.monto : calcularMontoServicio(tarifa(datos));
+
+  const errores = validarPedido(datos, actual?.fecha_entrega ?? null);
+  const peso = Number(datos.peso_kg);
+  if (!(peso > 0 && peso <= 100)) errores.peso_kg = 'Ingresa un peso entre 0.1 y 100 kg.';
   mostrarErrores(form, errores);
   if (Object.keys(errores).length) return;
+
   const boton = form.querySelector('button[type="submit"]');
   boton.disabled = true;
   try {
-    if (editandoId) { await actualizarComoPanel(editandoId, datos); mostrarToast('Pedido actualizado'); }
-    else { const c = await crearRegistro(datos); mostrarToast('Pedido creado: ' + c); }
+    if (editandoId) {
+      const ok = await actualizarComoPanel(editandoId, datos, yaPagado);
+      if (!ok) { mostrarToast('El pedido se pagó mientras lo editabas. Vuelve a abrirlo.', 'error'); dlgRegistro.close(); await recargar(); return; }
+      mostrarToast('Pedido actualizado');
+    } else {
+      const c = await crearRegistro(datos);
+      mostrarToast('Pedido creado: ' + c);
+    }
     dlgRegistro.close();
     await recargar();
   } catch (err) {
@@ -173,10 +254,14 @@ document.getElementById('btnSiEliminar').addEventListener('click', async () => {
   if (!puedeModificar) { dlgEliminar.close(); return mostrarToast('Fuera de tu turno no puedes eliminar pedidos', 'error'); }
   boton.disabled = true;
   try {
-    await eliminarRegistro(eliminandoId);
+    const resultado = await eliminarRegistro(eliminandoId);
     dlgEliminar.close();
-    mostrarToast('Pedido eliminado');
-    await recargar();
+    if (resultado.ok) {
+      mostrarToast('Pedido eliminado');
+      await recargar();
+    } else {
+      mostrarToast(resultado.mensaje, 'error');
+    }
   } catch (err) {
     console.error(err);
     mostrarToast('No se pudo eliminar el pedido', 'error');

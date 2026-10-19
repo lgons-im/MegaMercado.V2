@@ -20,7 +20,7 @@ const salidaAhora = document.getElementById('pagas-ahora');
 const botonEnviar = document.getElementById('botonEnviar');
 const pesoInput = form.elements.peso_kg;
 const pesoEstimadoEl = document.getElementById('pesoEstimado');
-let pesoManual = false;   // true si el cliente escribió su propio peso
+let pesoManual = false;
 
 function mostrarAviso(texto, tipo = 'error') {
   aviso.textContent = texto;
@@ -29,20 +29,27 @@ function mostrarAviso(texto, tipo = 'error') {
   if (texto) aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// ---------- Productos del carrito (precio y descripción salen de productos.js) ----------
 function lineasCarrito() {
   return Object.entries(leerCarrito())
-    .map(([id, cant]) => ({ p: buscarProducto(Number(id)), cant }))
+    .map(([id, cant]) => ({ p: buscarProducto(Number(id)), cant: Number(cant) || 0 }))
     .filter((l) => l.p);
 }
-const subtotalDe = (lineas) => redondear(lineas.reduce((a, l) => a + l.p.precio * l.cant, 0));
+
+const subtotalDe = (lineas) => redondear(lineas.reduce((a, l) => a + (Number(l.p.precio) || 0) * l.cant, 0));
 
 function pintarCarrito() {
   const lineas = lineasCarrito();
+  const subtotal = subtotalDe(lineas);
+
   carritoVacio.hidden = lineas.length > 0;
   botonEnviar.disabled = lineas.length === 0;
-  subtotalEl.textContent = formatearMoneda(subtotalDe(lineas));
+  
+  if (subtotalEl) {
+    subtotalEl.textContent = formatearMoneda(subtotal);
+  }
+
   sincronizarPeso(lineas);
+
   listaCarrito.innerHTML = lineas.map(({ p, cant }) => `
     <li class="linea">
       <img src="${escapar(p.img.trim())}" alt="" width="56" height="56" loading="lazy">
@@ -64,38 +71,55 @@ listaCarrito.addEventListener('click', (e) => {
   if (!b) return;
   cambiarCantidad(Number(b.dataset.id), b.dataset.accion === 'restar' ? -1 : 1);
 });
-window.addEventListener('carrito:cambio', pintarCarrito);
 
-// ---------- Peso estimado según los productos ----------
-function sincronizarPeso(lineas = lineasCarrito()) {
-  const kg = pesoCarritoKg(lineas);
-  pesoEstimadoEl.textContent = `${kg.toFixed(1)} kg`;
-  if (!pesoManual) pesoInput.value = kg > 0 ? kg : '';
+window.addEventListener('carrito:cambio', () => {
+  pintarCarrito();
   actualizarCotizacion();
-}
-pesoInput.addEventListener('input', () => { pesoManual = true; });
-document.getElementById('usarEstimado').addEventListener('click', () => {
-  pesoManual = false;
-  sincronizarPeso();
 });
 
-// ---------- Cotizador en vivo: productos + delivery = total ----------
+function sincronizarPeso(lineas = lineasCarrito()) {
+  const kg = pesoCarritoKg(lineas);
+  if (pesoEstimadoEl) {
+    pesoEstimadoEl.textContent = `${kg.toFixed(1)} kg`;
+  }
+  if (!pesoManual && pesoInput) {
+    pesoInput.value = kg > 0 ? kg : '';
+  }
+  actualizarCotizacion();
+}
+
+if (pesoInput) {
+  pesoInput.addEventListener('input', () => { pesoManual = true; });
+}
+
+const botonUsarEstimado = document.getElementById('usarEstimado');
+if (botonUsarEstimado) {
+  botonUsarEstimado.addEventListener('click', () => {
+    pesoManual = false;
+    sincronizarPeso();
+  });
+}
+
 const leerFormulario = () => Object.fromEntries(new FormData(form));
 
 function actualizarCotizacion() {
-  const delivery = calcularMontoServicio(leerFormulario());
-  const productos = subtotalDe(lineasCarrito());
-  salidaProductos.textContent = formatearSoles(productos);
-  salidaMonto.textContent = formatearSoles(delivery);
-  salidaTotal.textContent = formatearSoles(redondear(productos + delivery));   // total del pedido
-  salidaAhora.textContent = formatearSoles(delivery);                           // lo que se paga ahora
+  const delivery = Number(calcularMontoServicio(leerFormulario())) || 0;
+  const productos = Number(subtotalDe(lineasCarrito())) || 0;
+  const total = redondear(productos + delivery);
+
+  if (salidaProductos) salidaProductos.textContent = formatearSoles(productos);
+  if (salidaMonto) salidaMonto.textContent = formatearSoles(delivery);
+  if (salidaTotal) salidaTotal.textContent = formatearSoles(total);
+  if (salidaAhora) salidaAhora.textContent = formatearSoles(delivery);
 }
+
 form.addEventListener('input', actualizarCotizacion);
 form.addEventListener('change', actualizarCotizacion);
 
-form.elements.fecha_entrega.min = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+if (form.elements.fecha_entrega) {
+  form.elements.fecha_entrega.min = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
+}
 
-// ---------- Registrar el pedido ----------
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   mostrarAviso('');
@@ -108,8 +132,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   const datos = leerFormulario();
-  // Todo se recalcula aquí: no se confía en lo que muestra la pantalla
-  const delivery = calcularMontoServicio(datos);
+  const delivery = Number(calcularMontoServicio(datos)) || 0;
   const subtotal = subtotalDe(lineas);
   const total = redondear(subtotal + delivery);
   const detalle = lineas.map((l) => `${l.cant} x ${l.p.nombre} (${l.p.presentacion})`).join('; ')

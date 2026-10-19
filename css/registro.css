@@ -1075,3 +1075,32 @@ th,
     grid-column: 2;
   }
 }
+
+.registro-layout { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 60rem) { .registro-layout { grid-template-columns: 24rem 1fr; } }
+.carrito-resumen { border: 1px solid #d9e2dc; border-radius: 8px; padding: 1rem 1.25rem; }
+.lista-carrito { list-style: none; margin: 0; padding: 0; }
+.linea { display: grid; grid-template-columns: 56px 1fr auto auto; gap: .75rem; align-items: center;
+  padding: .6rem 0; border-bottom: 1px solid #e6ece8; }
+.linea img { width: 56px; height: 56px; object-fit: contain; }
+.linea__datos { display: flex; flex-direction: column; font-size: .9rem; min-width: 0; }
+.linea__datos span { color: #5b6b61; }
+.linea__importe { font-weight: 700; white-space: nowrap; }
+.linea .cantidad { display: inline-flex; align-items: center; gap: .4rem; }
+.linea .cantidad button { width: 1.9rem; height: 1.9rem; cursor: pointer; }
+.subtotal { margin: .9rem 0 .25rem; font-size: 1.05rem; }
+.carrito-vacio { padding: .75rem 0; }
+@media (max-width: 36rem) { .linea { grid-template-columns: 48px 1fr; } .linea .cantidad, .linea__importe { grid-column: 2; } }
+
+.cotizacion { padding: 1rem 1.25rem; border: 3px solid currentColor; border-radius: 8px; }
+.cotizacion p { margin: .15rem 0; }
+.cotizacion output { font-weight: 700; font-size: 1.25rem; }
+.cotizacion__total { font-size: 1.5rem; font-weight: 800; margin-top: .5rem !important;
+  border-top: 2px dashed currentColor; padding-top: .6rem; }
+.cotizacion__total output { font-size: 1.75rem; }
+.pagas-ahora { margin: .6rem 0 .25rem !important; padding: .5rem .75rem; background: rgba(224, 128, 28, .16);
+  border-radius: 6px; font-weight: 700; }
+.pagas-ahora output { font-size: 1.3rem; }
+
+label.check { display: flex; align-items: center; gap: .6rem; font-weight: 600; cursor: pointer; }
+label.check input[type="checkbox"] { width: 1.3rem; height: 1.3rem; margin: 0; padding: 0; flex: none; }

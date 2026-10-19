@@ -26,7 +26,6 @@ const filas = await sql`
 `;
 const pago = filas[0];
 
-/* ---------- utilidades para construir el DOM (siempre con textContent) ---------- */
 function el(tag, texto, clase) {
   const e = document.createElement(tag);
   if (texto !== undefined) e.textContent = texto;
@@ -55,7 +54,6 @@ function tabla(encabezados) {
   return { t, tbody };
 }
 
-// "1 x Arroz superior (Bolsa 5 kg); 2 x Aceite vegetal (Botella 1 L) | Subtotal productos: S/ 34.30"
 function leerProductos(detalle) {
   const [parteItems] = String(detalle ?? '').split(' | Subtotal productos:');
   const items = parteItems.split('; ').map((t) => {
@@ -73,7 +71,7 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
 } else {
   const monto = Number(pago.monto);
 
-  // Cabecera
+  
   const marca = el('div', undefined, 'boleta__marca');
   const h1 = el('h1', 'Mega');
   h1.append(el('span', 'Mercado'));
@@ -84,7 +82,6 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
     el('p', `N.° ${pago.codigo_operacion}`, 'boleta__numero'),
     el('span', 'PAGO APROBADO', 'boleta__estado'));
 
-  // Datos generales
   const dl = el('dl');
   datoMeta(dl, 'Fecha y hora', new Date(pago.fecha_pago).toLocaleString('es-PE', { timeZone: 'America/Lima' }));
   datoMeta(dl, 'Cliente', pago.cliente ?? 'Atención presencial');
@@ -94,8 +91,8 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
   if (pago.cajero) datoMeta(dl, 'Atendido por', pago.cajero);
   contenedor.append(dl);
 
-  // Productos del pedido
   contenedor.append(el('h2', 'Productos del pedido'));
+  let subtotalProductos = null;
   const items = leerProductos(pago.detalle_pedido);
   if (items) {
     const { t, tbody } = tabla(['Cant.', 'Descripción', 'P. unit.', 'Importe']);
@@ -106,13 +103,13 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
       fila(tbody, [String(i.cant), `${i.nombre} (${i.presentacion})`,
         i.precio !== null ? formatearSoles(i.precio) : '—', importe !== null ? formatearSoles(importe) : '—']);
     }
-    fila(tbody, ['', 'Subtotal de productos', '', formatearSoles(redondear(subtotal))], 'subtotal');
-    contenedor.append(t, el('p', 'Los productos se cancelan según tu sede. Esta boleta corresponde al pago del delivery.', 'nota'));
+    subtotalProductos = redondear(subtotal);
+    fila(tbody, ['', 'Subtotal de productos', '', formatearSoles(subtotalProductos)], 'subtotal');
+    contenedor.append(t, el('p', 'Los productos se cancelan según tu sede, al recibir tu pedido.', 'nota'));
   } else {
     contenedor.append(el('p', pago.detalle_pedido ?? '—'));
   }
 
-  // Delivery (lo que se pagó)
   contenedor.append(el('h2', 'Servicio de delivery (pagado)'));
   const { t: tDel, tbody: bDel } = tabla(['Cant.', 'Concepto', '', 'Importe']);
   const peso = Number(pago.peso_kg) || 0;
@@ -129,7 +126,6 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
   fila(bDel, ['', `Peso del pedido: ${peso} kg`, '', formatearSoles(monto)], 'subtotal');
   contenedor.append(tDel);
 
-  // Efectivo
   if (pago.metodo === 'efectivo') {
     const dlEf = el('dl');
     datoMeta(dlEf, 'Monto recibido', formatearSoles(Number(pago.monto_recibido)));
@@ -137,10 +133,21 @@ if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
     contenedor.append(dlEf);
   }
 
-  // TOTAL grande
-  const total = el('div', undefined, 'boleta__total');
-  total.append(el('span', 'Total pagado'), el('strong', formatearSoles(monto)));
-  contenedor.append(total);
+  if (subtotalProductos !== null) {
+    const granTotal = redondear(subtotalProductos + monto);
+    const total = el('div', undefined, 'boleta__total');
+    total.append(el('span', 'Total del pedido'), el('strong', formatearSoles(granTotal)));
+    const { t: tRes, tbody: bRes } = tabla(['', 'Resumen de pago', '', 'Importe']);
+    fila(bRes, ['', 'Productos', '', formatearSoles(subtotalProductos)]);
+    fila(bRes, ['', 'Delivery', '', formatearSoles(monto)]);
+    fila(bRes, ['', 'Pagado ahora (delivery)', '', formatearSoles(monto)], 'pagado');
+    fila(bRes, ['', 'Por pagar al recibir (productos)', '', formatearSoles(subtotalProductos)], 'pagado');
+    contenedor.append(total, tRes);
+  } else {
+    const total = el('div', undefined, 'boleta__total');
+    total.append(el('span', 'Total pagado'), el('strong', formatearSoles(monto)));
+    contenedor.append(total);
+  }
 
   contenedor.append(el('p', 'Gracias por su compra. Conserve esta boleta como constancia de pago.', 'boleta__pie'));
 }

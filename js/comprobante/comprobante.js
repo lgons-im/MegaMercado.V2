@@ -5,8 +5,8 @@ import { formatearSoles } from '../registro/tarifario.js';
 const usuario = exigirSesion();
 
 const NOMBRES_METODO = {
-    tarjeta_debito: 'Tarjeta de débito', tarjeta_credito: 'Tarjeta de crédito',
-    billetera: 'Billetera electrónica', efectivo: 'Efectivo', pos: 'Tarjeta en POS'
+  tarjeta_debito: 'Tarjeta de débito', tarjeta_credito: 'Tarjeta de crédito',
+  billetera: 'Billetera electrónica', efectivo: 'Efectivo', pos: 'Tarjeta en POS'
 };
 
 const contenedor = document.querySelector('#comprobante');
@@ -15,7 +15,7 @@ const op = new URLSearchParams(location.search).get('op');
 const filas = await sql`
   SELECT p.codigo_operacion, p.canal, p.metodo, p.proveedor_billetera, p.marca_tarjeta, p.referencia,
          p.monto, p.monto_recibido, p.vuelto, p.fecha_pago, p.id_usuario,
-         r.codigo_seguimiento, u.nombre AS cliente, c.nombre AS cajero
+         r.codigo_seguimiento, r.detalle_pedido, u.nombre AS cliente, c.nombre AS cajero
   FROM pagos p
   JOIN pedidos_delivery_megamercado r ON r.id = p.id_registro
   LEFT JOIN usuarios u ON u.id = p.id_usuario
@@ -25,30 +25,32 @@ const filas = await sql`
 const pago = filas[0];
 
 function agregarDato(lista, etiqueta, valor) {
-    const dt = document.createElement('dt');
-    const dd = document.createElement('dd');
-    dt.textContent = etiqueta;
-    dd.textContent = valor ?? '—';
-    lista.append(dt, dd);
+  const dt = document.createElement('dt');
+  const dd = document.createElement('dd');
+  dt.textContent = etiqueta;
+  dd.textContent = valor ?? '—';
+  lista.append(dt, dd);
 }
 
 if (!pago || (usuario.rol === 'cliente' && pago.id_usuario !== usuario.id)) {
-    contenedor.textContent = 'Comprobante no encontrado.';
+  contenedor.textContent = 'Comprobante no encontrado.';
 } else {
-    const dl = document.createElement('dl');
-    agregarDato(dl, 'N.° de operación', pago.codigo_operacion);
-    agregarDato(dl, 'Pedido', pago.codigo_seguimiento);
-    agregarDato(dl, 'Cliente', pago.cliente ?? 'Atención presencial');
-    agregarDato(dl, 'Canal', pago.canal === 'pasarela' ? 'Pago en línea' : 'Ventanilla');
-    agregarDato(dl, 'Medio', `${NOMBRES_METODO[pago.metodo]} ${pago.marca_tarjeta ?? pago.proveedor_billetera ?? ''} ${pago.referencia ?? ''}`.trim());
-    agregarDato(dl, 'Importe', formatearSoles(Number(pago.monto)));
-    if (pago.metodo === 'efectivo') {
-        agregarDato(dl, 'Recibido', formatearSoles(Number(pago.monto_recibido)));
-        agregarDato(dl, 'Vuelto', formatearSoles(Number(pago.vuelto)));
-    }
-    if (pago.cajero) agregarDato(dl, 'Atendido por', pago.cajero);
-    agregarDato(dl, 'Fecha y hora', new Date(pago.fecha_pago).toLocaleString('es-PE', { timeZone: 'America/Lima' }));
-    contenedor.append(dl);
+  const dl = document.createElement('dl');
+  agregarDato(dl, 'N.° de operación', pago.codigo_operacion);
+  agregarDato(dl, 'Pedido', pago.codigo_seguimiento);
+  agregarDato(dl, 'Concepto', 'Costo de delivery');
+  agregarDato(dl, 'Detalle del pedido', pago.detalle_pedido);
+  agregarDato(dl, 'Cliente', pago.cliente ?? 'Atención presencial');
+  agregarDato(dl, 'Canal', pago.canal === 'pasarela' ? 'Pago en línea' : 'Ventanilla');
+  agregarDato(dl, 'Medio', `${NOMBRES_METODO[pago.metodo]} ${pago.marca_tarjeta ?? pago.proveedor_billetera ?? ''} ${pago.referencia ?? ''}`.trim());
+  agregarDato(dl, 'Importe pagado (delivery)', formatearSoles(Number(pago.monto)));
+  if (pago.metodo === 'efectivo') {
+    agregarDato(dl, 'Recibido', formatearSoles(Number(pago.monto_recibido)));
+    agregarDato(dl, 'Vuelto', formatearSoles(Number(pago.vuelto)));
+  }
+  if (pago.cajero) agregarDato(dl, 'Atendido por', pago.cajero);
+  agregarDato(dl, 'Fecha y hora', new Date(pago.fecha_pago).toLocaleString('es-PE', { timeZone: 'America/Lima' }));
+  contenedor.append(dl);
 }
 
 document.querySelector('#imprimir').addEventListener('click', () => window.print());

@@ -146,13 +146,13 @@ form.addEventListener('submit', async (e) => {
       INSERT INTO pedidos_delivery_megamercado
         (codigo_seguimiento, nombre_contacto, telefono, direccion, distrito, referencia,
          sede_atencion, fecha_entrega, franja_horaria, metodo_pago, detalle_pedido,
-         peso_kg, incluye_congelados, subtotal_productos, costo_delivery,
+         peso_kg, incluye_congelados,
          total, monto_calculado, estado_pago, estado, id_usuario)
       VALUES
         (${codigo}, ${datos.nombre_contacto.trim()}, ${datos.telefono}, ${datos.direccion.trim()},
          ${datos.distrito.trim()}, ${datos.referencia?.trim() || null}, ${datos.sede_atencion},
          ${datos.fecha_entrega}, ${datos.franja_horaria}, 'pendiente', ${detalle},
-         ${Number(datos.peso_kg)}, ${marcado(datos.incluye_congelados)}, ${subtotal}, ${delivery},
+         ${Number(datos.peso_kg)}, ${marcado(datos.incluye_congelados)},
          ${total}, ${total}, 'pendiente', 'registrado', ${usuario.id})
       RETURNING id;
     `;

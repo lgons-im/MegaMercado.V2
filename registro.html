@@ -4,16 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Solicitar delivery | MegaMercado</title>
-    <meta
-      name="description"
-      content="Solicitar delivery en MegaMercado, tu supermercado en línea."
-    />
+    <meta name="description" content="Solicitar delivery en MegaMercado, tu supermercado en línea." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/registro.css" />
   </head>
   <body>
@@ -25,68 +19,16 @@
     </div>
     <header class="header">
       <div class="contenedor header__main">
-        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"
-          ><img
-            src="img/logo-cesta.svg"
-            alt=""
-            width="62"
-            height="50"
-          />Mega<span>Mercado</span></a
-        >
-        <form
-          class="buscador"
-          role="search"
-          action="catalogo.html"
-          method="get"
-        >
+        <a class="logo" href="index.html" aria-label="MegaMercado, ir al inicio"><img src="img/logo-cesta.svg" alt="" width="62" height="50" />Mega<span>Mercado</span></a>
+        <form class="buscador" role="search" action="catalogo.html" method="get">
           <label class="sr-only" for="q">Buscar productos</label>
-          <input
-            id="q"
-            name="q"
-            type="search"
-            placeholder="¿Qué estás buscando hoy?"
-          />
+          <input id="q" name="q" type="search" placeholder="¿Qué estás buscando hoy?" />
           <button type="submit">Buscar</button>
         </form>
         <div class="header__acciones">
-          <a class="cuenta" id="enlaceCuenta" href="login.html"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg
-            ><span
-              ><span class="cuenta__saludo">Hola</span
-              ><span class="cuenta__accion">Iniciar sesión</span></span
-            ></a
-          >
-          <button type="button" class="salir" id="botonSalir" hidden>
-            Salir
-          </button>
-          <a class="carrito" href="registro.html" aria-label="Mi pedido"
-            ><span class="sr-only">Productos en mi pedido:</span
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path
-                d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6"
-              />
-              <circle cx="10" cy="20.5" r="1.3" />
-              <circle cx="18" cy="20.5" r="1.3" /></svg
-            ><span class="carrito__contador" id="contadorCarrito">0</span></a
-          >
+          <a class="cuenta" id="enlaceCuenta" href="login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" /></svg><span><span class="cuenta__saludo">Hola</span><span class="cuenta__accion">Iniciar sesión</span></span></a>
+          <button type="button" class="salir" id="botonSalir" hidden>Salir</button>
+          <a class="carrito" href="registro.html" aria-label="Mi pedido"><span class="sr-only">Productos en mi pedido:</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.5L21.5 8H6" /><circle cx="10" cy="20.5" r="1.3" /><circle cx="18" cy="20.5" r="1.3" /></svg><span class="carrito__contador" id="contadorCarrito">0</span></a>
         </div>
       </div>
       <nav class="nav" aria-label="Principal">
@@ -96,11 +38,7 @@
             <li><a href="catalogo.html">Catálogo</a></li>
             <li><a href="registro.html" aria-current="page">Delivery</a></li>
             <li><a href="contacto.html">Sedes</a></li>
-            <li>
-              <a class="nav__oferta" href="catalogo.html?cat=ofertas"
-                >Ofertas de la semana</a
-              >
-            </li>
+            <li><a class="nav__oferta" href="catalogo.html?cat=ofertas">Ofertas de la semana</a></li>
           </ul>
         </div>
       </nav>
@@ -108,33 +46,18 @@
     <main id="contenido">
       <div class="contenedor pagina">
         <h1>Solicitar delivery</h1>
-        <p class="pagina__sub">
-          Revisa tus productos, indica el peso y paga el envío para que tu
-          pedido salga.
-        </p>
-        <p
-          id="avisoRegistro"
-          class="aviso aviso--error"
-          role="alert"
-          hidden
-        ></p>
+        <p class="pagina__sub">Revisa tus productos, indica el peso y paga el total (productos + delivery) para que tu pedido salga.</p>
+        <p id="avisoRegistro" class="aviso aviso--error" role="alert" hidden></p>
 
         <div class="registro-layout">
           <section class="carrito-resumen" aria-labelledby="t-carrito">
             <h2 id="t-carrito">Tus productos</h2>
             <p id="carritoVacio" class="carrito-vacio" hidden>
-              Tu pedido no tiene productos.
-              <a href="catalogo.html">Ir al catálogo</a>
+              Tu pedido no tiene productos. <a href="catalogo.html">Ir al catálogo</a>
             </p>
             <ul id="listaCarrito" class="lista-carrito"></ul>
-            <p class="subtotal">
-              Subtotal de productos:
-              <strong id="subtotalProductos">S/ 0.00</strong>
-            </p>
-            <p class="meta">
-              El pago en línea corresponde al costo del delivery. Los productos
-              se cancelan según tu sede.
-            </p>
+            <p class="subtotal">Subtotal de productos: <strong id="subtotalProductos">S/ 0.00</strong></p>
+            <p class="meta">En el formulario ves el total del pedido y lo que pagas ahora.</p>
             <a class="btn btn--borde" href="catalogo.html">Seguir comprando</a>
           </section>
 
@@ -144,61 +67,23 @@
               <div class="form-grid">
                 <div class="campo ancho">
                   <label for="r-nombre_contacto">Nombre de quien recibe</label>
-                  <input
-                    id="r-nombre_contacto"
-                    name="nombre_contacto"
-                    type="text"
-                    required
-                    minlength="3"
-                    maxlength="120"
-                    autocomplete="name"
-                  />
+                  <input id="r-nombre_contacto" name="nombre_contacto" type="text" required minlength="3" maxlength="120" autocomplete="name" />
                 </div>
                 <div class="campo">
                   <label for="r-telefono">Celular</label>
-                  <input
-                    id="r-telefono"
-                    name="telefono"
-                    type="tel"
-                    required
-                    inputmode="numeric"
-                    maxlength="9"
-                    pattern="9[0-9]{8}"
-                    title="9 dígitos, empieza con 9"
-                    autocomplete="tel-national"
-                    placeholder="9XXXXXXXX"
-                  />
+                  <input id="r-telefono" name="telefono" type="tel" required inputmode="numeric" maxlength="9" pattern="9[0-9]{8}" title="9 dígitos, empieza con 9" autocomplete="tel-national" placeholder="9XXXXXXXX" />
                 </div>
                 <div class="campo">
                   <label for="r-distrito">Distrito</label>
-                  <input
-                    id="r-distrito"
-                    name="distrito"
-                    type="text"
-                    required
-                    maxlength="80"
-                  />
+                  <input id="r-distrito" name="distrito" type="text" required maxlength="80" />
                 </div>
                 <div class="campo ancho">
                   <label for="r-direccion">Dirección de entrega</label>
-                  <input
-                    id="r-direccion"
-                    name="direccion"
-                    type="text"
-                    required
-                    maxlength="200"
-                    autocomplete="street-address"
-                  />
+                  <input id="r-direccion" name="direccion" type="text" required maxlength="200" autocomplete="street-address" />
                 </div>
                 <div class="campo ancho">
                   <label for="r-referencia">Referencia (opcional)</label>
-                  <input
-                    id="r-referencia"
-                    name="referencia"
-                    type="text"
-                    maxlength="200"
-                    placeholder="Frente al parque, casa de reja negra…"
-                  />
+                  <input id="r-referencia" name="referencia" type="text" maxlength="200" placeholder="Frente al parque, casa de reja negra…" />
                 </div>
               </div>
             </fieldset>
@@ -216,12 +101,7 @@
                 </div>
                 <div class="campo">
                   <label for="r-fecha_entrega">Fecha de entrega</label>
-                  <input
-                    id="r-fecha_entrega"
-                    name="fecha_entrega"
-                    type="date"
-                    required
-                  />
+                  <input id="r-fecha_entrega" name="fecha_entrega" type="date" required />
                 </div>
                 <div class="campo">
                   <label for="r-franja_horaria">Franja horaria</label>
@@ -234,56 +114,27 @@
                 </div>
                 <div class="campo">
                   <label for="r-peso_kg">Peso del pedido (kg)</label>
-                  <input
-                    id="r-peso_kg"
-                    name="peso_kg"
-                    type="number"
-                    required
-                    min="0.1"
-                    max="100"
-                    step="0.1"
-                    inputmode="decimal"
-                    aria-describedby="ayuda-peso"
-                  />
+                  <input id="r-peso_kg" name="peso_kg" type="number" required min="0.1" max="100" step="0.1" inputmode="decimal" aria-describedby="ayuda-peso" />
                   <p id="ayuda-peso" class="meta">
-                    Estimado según tus productos:
-                    <strong id="pesoEstimado">0.0 kg</strong>. Puedes ajustarlo.
-                    <button
-                      type="button"
-                      class="btn btn--chico btn--borde"
-                      id="usarEstimado"
-                    >
-                      Usar estimado
-                    </button>
+                    Estimado según tus productos: <strong id="pesoEstimado">0.0 kg</strong>. Puedes ajustarlo.
+                    <button type="button" class="btn btn--chico btn--borde" id="usarEstimado">Usar estimado</button>
                   </p>
                 </div>
                 <div class="campo ancho">
-                  <label
-                    ><input type="checkbox" name="incluye_congelados" /> Incluye
-                    productos congelados (+ S/ 5.00)</label
-                  >
+                  <label class="check"><input type="checkbox" name="incluye_congelados" /> Incluye productos congelados (+ S/ 5.00)</label>
                 </div>
-                <div class="campo ancho cotizacion">
-                  <p>
-                    Costo de delivery:
-                    <output
-                      id="monto-estimado"
-                      for="r-peso_kg"
-                      aria-live="polite"
-                      >S/ 0.00</output
-                    >
-                  </p>
-                  <p class="meta">
-                    S/ 8.00 hasta 5 kg, más S/ 1.50 por cada kg adicional.
-                  </p>
+                <div class="campo ancho cotizacion" aria-live="polite">
+                  <p>Productos: <output id="cotiz-productos">S/ 0.00</output></p>
+                  <p>Costo de delivery: <output id="monto-estimado">S/ 0.00</output></p>
+                  <p class="cotizacion__total">Total del pedido: <output id="total-estimado">S/ 0.00</output></p>
+                  <p class="pagas-ahora">Pagas ahora (solo el delivery): <output id="pagas-ahora">S/ 0.00</output></p>
+                  <p class="meta">Los productos se pagan al recibir tu pedido. Delivery: S/ 8.00 hasta 5 kg, más S/ 1.50 por cada kg adicional y S/ 5.00 si lleva congelados.</p>
                 </div>
               </div>
             </fieldset>
 
             <div class="acciones-form">
-              <button type="submit" class="btn btn--primario" id="botonEnviar">
-                Registrar y pagar
-              </button>
+              <button type="submit" class="btn btn--primario" id="botonEnviar">Registrar y pagar</button>
               <a class="btn btn--borde" href="consulta.html">Mis pedidos</a>
             </div>
           </form>
@@ -293,14 +144,7 @@
     <footer class="footer">
       <div class="contenedor footer__cols">
         <div>
-          <a class="logo" href="index.html"
-            ><img
-              src="img/logo-cesta.svg"
-              alt=""
-              width="62"
-              height="50"
-            />Mega<span>Mercado</span></a
-          >
+          <a class="logo" href="index.html"><img src="img/logo-cesta.svg" alt="" width="62" height="50" />Mega<span>Mercado</span></a>
           <p>Tu supermercado de confianza. Compra en línea y recibe en casa.</p>
         </div>
         <div>

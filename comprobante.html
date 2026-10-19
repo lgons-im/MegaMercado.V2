@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Constancia de pago | MegaMercado Perú</title>
-    <link rel="stylesheet" href="css/comprobante.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boleta de pago | MegaMercado Perú</title>
+  <link rel="stylesheet" href="css/comprobante.css">
 </head>
-
 <body>
-    <header>
-        <nav aria-label="Navegación principal">
-            <a href="consulta.html">Mis pedidos</a>
-        </nav>
-    </header>
-    <main>
-        <h1>Constancia de pago</h1>
-        <section id="comprobante" aria-live="polite"></section>
-        <div class="acciones">
-            <button type="button" id="imprimir">Imprimir</button>
-            <a href="consulta.html">Volver</a>
-        </div>
-    </main>
-    <script type="module" src="js/comprobante/comprobante.js"></script>
+  <header>
+    <nav aria-label="Navegación principal">
+      <a href="catalogo.html">Catálogo</a>
+      <a href="consulta.html">Mis pedidos</a>
+    </nav>
+  </header>
+  <main>
+    <article id="comprobante" class="boleta" aria-live="polite" aria-label="Boleta de pago"></article>
+    <div class="acciones">
+      <button type="button" id="imprimir">Imprimir boleta</button>
+      <a href="consulta.html">Volver a mis pedidos</a>
+    </div>
+  </main>
+  <script type="module" src="js/comprobante/comprobante.js"></script>
 </body>
-
 </html>
